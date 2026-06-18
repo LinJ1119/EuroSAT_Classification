@@ -39,6 +39,7 @@ Thumbs.db
 Desktop.ini
 
 # ===== Design Docs (local only) =====
+docs/CHANGELOG.md
 docs/CLAUDE.md
 docs/*需求规格*
 docs/*技术选型*
