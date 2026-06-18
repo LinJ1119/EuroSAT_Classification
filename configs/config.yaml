@@ -1,0 +1,87 @@
+# ===== EuroSAT 卫星影像分类系统 — 配置文件 =====
+# 依据: SRS V1.0 附录B, DDS §2.2
+# 用户只需修改 data.root_dir 即可开始训练
+
+# ----- 顶层 -----
+experiment_name: eurosat_classification   # 实验名称
+seed: 42                                  # 全局随机种子（torch/numpy/random）
+
+# ----- 系统配置 -----
+system:
+  gpu_id: 0                               # GPU 设备编号（-1=CPU）
+  gpu_memory_fraction: 0.75               # 进程显存使用比例上限 (0, 1]
+  num_workers: 4                          # DataLoader 子进程数
+  log_level: INFO                         # 日志级别: DEBUG / INFO / WARNING / ERROR
+  output_dir: "./runs"                    # 输出根目录
+
+# ----- 数据配置 -----
+data:
+  root_dir: "D:/DataDownload/EuroSat_Dataset/EuroSAT"   # EuroSAT 数据集根目录（必填）
+  num_classes: 10                         # 类别数（固定 10）
+  class_names:                            # 类别名列表（按字母序对应标签 0~9）
+    - AnnualCrop                         # 年度作物
+    - Forest                             # 森林
+    - HerbaceousVegetation               # 草本植被
+    - Highway                            # 高速公路
+    - Industrial                         # 工业区
+    - Pasture                            # 牧场
+    - PermanentCrop                      # 永久作物
+    - Residential                        # 住宅区
+    - River                              # 河流
+    - SeaLake                            # 海湖
+  train_ratio: 0.7                        # 训练集比例
+  val_ratio: 0.1                          # 验证集比例（测试集=1-train_ratio-val_ratio）
+  input_size: 224                         # ResNet18 输入尺寸（固定 224）
+  original_size: 64                       # EuroSAT 原始图像尺寸（用于日志校验）
+
+# ----- 数据增强 -----
+augmentation:
+  horizontal_flip: 0.5                    # 随机水平翻转概率（0=关闭）
+  rotation_degrees: 15.0                  # 随机旋转最大角度（0=关闭）
+  brightness: 0.2                         # 亮度调整幅度（0=关闭）
+  contrast: 0.2                           # 对比度调整幅度（0=关闭）
+
+# ----- 模型配置 -----
+model:
+  name: "resnet18"                        # 模型名称: resnet18 / mobilenet_v3_large
+  pretrained: true                        # 是否加载预训练权重
+  pretrained_weights: "IMAGENET1K_V1"    # 在线权重版本（本地路径优先）
+  pretrained_path: "D:/DataDownload/Models/resnet18-f37072fd.pth"                     # 本地权重文件路径（空=在线下载，填写后优先使用本地文件）
+  freeze_backbone: true                   # 是否冻结骨干网络（迁移学习：仅训练分类头）
+  unfreeze_layers: 1                      # 解冻最后 N 个残差块（0=全部冻结, 1=layer4, ..., 4=全部解冻）
+
+# ----- 训练配置 -----
+train:
+  batch_size: 256                         # 训练批大小
+  epochs: 80                              # 总训练轮数（推荐 50，快速验证可设 30）
+  learning_rate: 0.0001                   # 初始学习率（1e-4）
+  optimizer: "adamw"                      # 优化器: adamw / adam / sgd
+  weight_decay: 0.0005                    # 权重衰减（5e-4）
+  momentum: 0.9                           # SGD 动量（仅 optimizer=sgd 时生效）
+  loss: "cross_entropy"                   # 损失函数
+  lr_scheduler: "plateau"                 # 学习率调度: plateau（监控val_loss）/ cosine / none
+  lr_patience: 5                          # ReduceLROnPlateau 等待轮数
+  lr_factor: 0.5                          # ReduceLROnPlateau 衰减因子
+  early_stop_patience: 10                 # 早停耐心值（连续N轮val_loss无改善则停止，0=关闭）
+  early_stop_min_delta: 0.001             # 早停最小改善阈值
+  checkpoint_dir: "checkpoints"           # 检查点保存目录
+  log_dir: "logs"                         # TensorBoard 日志目录
+  save_best_only: false                   # true=仅保存最佳模型, false=额外保存定期检查点
+  save_interval: 10                       # 每隔 N 个 epoch 保存定期检查点
+  resume: ""                              # 恢复训练的检查点路径（空=从头训练）
+
+# ----- 推理配置 -----
+inference:
+  batch_size: 256                         # 推理批次大小
+  top_k: 2                                # 返回 Top-K 预测结果
+  conf_warning_threshold: 0.3             # 低置信度告警阈值（预测置信度低于此值时发出警告）
+  output_dir: "./outputs/predictions"     # 预测结果输出目录
+  save_format: "csv"                      # 结果保存格式: csv / json
+
+# ----- 可视化配置 -----
+visualization:
+  dpi: 200                                # 输出图像分辨率（DPI）
+  figsize: [10, 8]                        # 图像尺寸（英寸，[宽, 高]）
+  cmap: "Blues"                           # 混淆矩阵配色方案
+  show_values: true                       # 混淆矩阵格子中是否显示数值
+  plot_format: "png"                      # 输出图像格式: png / pdf / svg

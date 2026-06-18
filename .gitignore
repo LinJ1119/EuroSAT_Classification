@@ -1,0 +1,43 @@
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+*.egg
+dist/
+build/
+
+# ===== Virtual Environment =====
+venv/
+.venv/
+env/
+.env/
+
+# ===== Jupyter =====
+.ipynb_checkpoints/
+*.ipynb
+
+# ===== Runtime Generated =====
+checkpoints/
+logs/
+runs/
+outputs/
+*.pth
+*.pth.tar
+*.tmp
+
+# ===== IDE =====
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ===== OS =====
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ===== Config (personal paths) =====
+# Uncomment if you want to keep personal config out of repo:
+# configs/config.yaml

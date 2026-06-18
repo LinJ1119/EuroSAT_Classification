@@ -1,0 +1,39 @@
+# EuroSAT Satellite Image Classification System -- Dependencies
+# Python: 3.8.x
+#
+# IMPORTANT: torch/torchvision must be installed BEFORE running this file.
+# Install them first from local .whl or PyTorch official wheel repo:
+#   cd D:/CodingStudy/wheels_download
+#   pip install torch-1.12.1+cu113-cp38-cp38-win_amd64.whl
+#   pip install torchvision-0.13.1+cu113-cp38-cp38-win_amd64.whl
+#   cd d:/myproject/EuroSat_images_classification
+#
+# Then install the rest:
+#   pip install -r requirements.txt
+
+# --- Deep Learning Framework ---
+torch==1.12.1+cu113
+torchvision==0.13.1+cu113
+
+# --- Numerical Computing ---
+numpy==1.21.6
+
+# --- Image Processing ---
+Pillow==9.5.0
+
+# --- Visualization ---
+matplotlib==3.5.3
+seaborn==0.11.2
+
+# --- Training Monitor & Progress ---
+tensorboard==2.9.1
+tqdm==4.64.1
+
+# --- Config Management ---
+pyyaml==6.0.1
+
+# --- Data Processing ---
+pandas==1.3.5
+
+# --- Metrics Verification ---
+scikit-learn==1.0.2
