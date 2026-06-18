@@ -38,6 +38,19 @@ outputs/
 Thumbs.db
 Desktop.ini
 
+# ===== Design Docs (local only) =====
+docs/CLAUDE.md
+docs/*需求规格*
+docs/*技术选型*
+docs/*概要设计*
+docs/*详细设计*
+docs/*分步研发*
+docs/*研发工作流程*
+docs/*研发总结*
+docs/ARCHITECTURE.md
+docs/MODEL.md
+V1.0_checksums.txt
+
 # ===== Config (personal paths) =====
 # Uncomment if you want to keep personal config out of repo:
 # configs/config.yaml
