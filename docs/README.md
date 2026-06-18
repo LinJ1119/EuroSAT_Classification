@@ -59,7 +59,7 @@ python main.py --mode predict --input test.jpg --model checkpoints/best_model.pt
 ├── check_env.py         # 一键环境检测（6 项）
 ├── configs/config.yaml  # 配置文件（唯一配置入口）
 ├── tests/               # 单元测试（29 项）+ E2E 测试
-├── docs/                # 设计文档（SRS/ADS/DDS/技术选型/研发指南）
+├── docs/                # 用户文档
 ├── checkpoints/         # 模型权重（运行时生成）
 ├── logs/                # 训练日志 + TensorBoard（运行时生成）
 └── outputs/             # 评估/推理结果（运行时生成）
