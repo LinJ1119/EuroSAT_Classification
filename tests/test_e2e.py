@@ -38,9 +38,9 @@ def test_e2e_mini_pipeline(config):
             class_counts[cls] += 1
     assert len(mini_indices) >= 50, f"迷你测试集不足 50 张: {len(mini_indices)}"
 
-    from torch.utils.data import DataLoader, Subset
-    mini_test_ds = Subset(test_ds.dataset, mini_indices)
-    mini_test_ds.transform = test_ds.transform
+    from torch.utils.data import DataLoader
+    from data import SubsetWithTransform, _build_eval_transform
+    mini_test_ds = SubsetWithTransform(test_ds.dataset, mini_indices, _build_eval_transform(config))
 
     # ── 2. 训练 3 epoch ──
     from model import build_model
@@ -62,8 +62,7 @@ def test_e2e_mini_pipeline(config):
         config, model, train_loader, val_loader,
         optimizer, None, criterion, writer, device,
     )
-    trainer.config.train.epochs = 3  # 覆盖为 3 epoch
-    trainer.run(start_epoch=1)
+    trainer.run(start_epoch=1, max_epochs=3)
     writer.close()
 
     # 验证 best_model 存在

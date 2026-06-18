@@ -64,6 +64,18 @@ class TestModelConstruction:
         assert ratio < 0.001, \
             f"可训练参数占比过高: {ratio:.4f}（期望 < 0.1%）"
 
+    def test_unfrozen_layer4_trainable_params(self, config, model):
+        """解冻layer4时可训练参数在合理范围（~8.4M，占75%）"""
+        if config.model.unfreeze_layers != 1:
+            pytest.skip("当前配置未启用 unfreeze_layers=1，跳过解冻测试")
+        trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
+        total = sum(p.numel() for p in model.parameters())
+        assert 7_000_000 <= trainable <= 9_000_000, \
+            f"解冻layer4后可训练参数异常: {trainable:,}（期望 7-9M）"
+        ratio = trainable / total
+        assert 0.6 < ratio < 0.85, \
+            f"可训练参数占比异常: {ratio:.2%}（期望 60%-85%）"
+
     def test_output_is_logits_not_probs(self, model):
         """输出为 logits（未经 softmax），值可在正负范围"""
         model.eval()

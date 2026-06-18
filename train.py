@@ -190,17 +190,19 @@ class Trainer:
 
     # ── 主循环 ──
 
-    def run(self, start_epoch: int = 1) -> None:
+    def run(self, start_epoch: int = 1, max_epochs: int = None) -> None:
         """执行完整训练主循环。
         依据: DDS §5.5
         Args:
             start_epoch: 起始 epoch 编号（断点续训时 > 1）
+            max_epochs: 最大 epoch 数（None=使用配置文件值，E2E 测试用）
         """
-        logger.info(f"开始训练: epochs={self.config.train.epochs}, "
+        total_epochs = max_epochs if max_epochs is not None else self.config.train.epochs
+        logger.info(f"开始训练: epochs={total_epochs}, "
                      f"batch_size={self.config.train.batch_size}, "
                      f"lr={self.config.train.learning_rate}")
 
-        for epoch in range(start_epoch, self.config.train.epochs + 1):
+        for epoch in range(start_epoch, total_epochs + 1):
             self.current_epoch = epoch
             epoch_start = time.time()
 
