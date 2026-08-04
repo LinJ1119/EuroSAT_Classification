@@ -21,7 +21,12 @@ env/
 checkpoints/
 logs/
 runs/
-outputs/
+outputs/*
+!outputs/evaluation/
+outputs/evaluation/*
+!outputs/evaluation/class_accuracy.png
+!outputs/evaluation/confusion_matrix.png
+!outputs/evaluation/eval_report.md
 *.pth
 *.pth.tar
 *.tmp
